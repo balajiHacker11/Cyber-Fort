@@ -1,0 +1,6 @@
+{
+  "name": "Cyber Fort",
+  "description": "Crypto-focused cybersecurity platform featuring real-time market data charts, interactive protection sandboxes, threat simulations, and defense tutorials.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
