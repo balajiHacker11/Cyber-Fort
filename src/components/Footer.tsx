@@ -66,6 +66,15 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               Course Mastery Checkpoints
             </button>
           </div>
+          <div>
+            <button
+              type="button"
+              onClick={() => onNavigate('ctf')}
+              className="text-cyan-400 hover:text-cyan-300 transition-colors cursor-pointer font-bold"
+            >
+              CTF Arena & Challenges
+            </button>
+          </div>
         </div>
 
         {/* Labs Quick Links */}

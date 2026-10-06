@@ -1,5 +1,6 @@
 export interface UserClearance {
   registerNumber: string;
+  fullName: string;
   verifiedAt: string;
   safetyScore: number;
   threatLevel: 'Low' | 'Moderate' | 'Elevated' | 'Critical';

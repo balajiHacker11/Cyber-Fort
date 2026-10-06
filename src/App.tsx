@@ -4,9 +4,10 @@ import { Navbar } from './components/Navbar';
 import { CyberSecurityCore } from './components/CyberSecurityCore';
 import { InteractiveLabs } from './components/InteractiveLabs';
 import { DefenseTutorials } from './components/DefenseTutorials';
+import { CtfArena } from './components/ctf/CtfArena';
 import { Footer } from './components/Footer';
 import { UserClearance } from './types';
-import { Shield, BookOpen, Terminal, CheckCircle2 } from 'lucide-react';
+import { Shield, BookOpen, Terminal, CheckCircle2, Flag } from 'lucide-react';
 
 export default function App() {
   const [clearance, setClearance] = useState<UserClearance | null>(() => {
@@ -43,6 +44,7 @@ export default function App() {
       <SecurityGate
         onClearanceGranted={handleClearanceGranted}
         initialRegisterNumber={clearance?.registerNumber || ''}
+        initialFullName={clearance?.fullName || ''}
       />
     );
   }
@@ -80,6 +82,9 @@ export default function App() {
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   AUTHENTICATED CLEARANCE
                 </span>
+                <span className="text-slate-500">·</span>
+                <span className="text-slate-400">Operator:</span>
+                <span className="text-white font-bold">{clearance.fullName || 'Operator'}</span>
                 <span className="text-slate-500">·</span>
                 <span className="text-slate-400">Register ID:</span>
                 <span className="text-cyan-300 font-bold">{clearance.registerNumber}</span>
@@ -133,6 +138,18 @@ export default function App() {
                   <BookOpen className="w-4 h-4" />
                   <span>Defense Masterclasses (6 Courses)</span>
                 </button>
+                <button
+                  type="button"
+                  onClick={() => setCurrentTab('ctf')}
+                  className={`px-3.5 py-2 text-xs font-mono rounded-lg transition-colors cursor-pointer flex items-center gap-2 ${
+                    currentTab === 'ctf'
+                      ? 'bg-cyan-600 text-slate-950 font-bold shadow-[0_0_15px_rgba(6,182,212,0.4)]'
+                      : 'bg-[#060913] text-slate-300 hover:text-white border border-cyan-950 hover:border-cyan-800'
+                  }`}
+                >
+                  <Flag className="w-4 h-4 text-cyan-400" />
+                  <span>CTF Arena (8 Domains)</span>
+                </button>
               </div>
             </div>
 
@@ -158,6 +175,9 @@ export default function App() {
 
         {/* Tab 3: Defense Masterclasses & Quizzes */}
         {currentTab === 'tutorials' && <DefenseTutorials clearance={clearance} />}
+
+        {/* Tab 4: Capture The Flag (CTF) Arena */}
+        {currentTab === 'ctf' && <CtfArena clearance={clearance} />}
       </main>
 
       {/* Footer */}

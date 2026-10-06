@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
-import { ShieldCheck, ShieldAlert, KeyRound, Search, Terminal, Lock, ArrowRight, CheckCircle2, AlertTriangle, Cpu } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, KeyRound, Search, Terminal, Lock, ArrowRight, CheckCircle2, AlertTriangle, Cpu, User } from 'lucide-react';
 import { UserClearance } from '../types';
 
 interface SecurityGateProps {
   onClearanceGranted: (clearance: UserClearance) => void;
   initialRegisterNumber?: string;
+  initialFullName?: string;
 }
 
-export const SecurityGate: React.FC<SecurityGateProps> = ({ onClearanceGranted, initialRegisterNumber = '' }) => {
+export const SecurityGate: React.FC<SecurityGateProps> = ({ 
+  onClearanceGranted, 
+  initialRegisterNumber = '',
+  initialFullName = ''
+}) => {
+  const [nameInput, setNameInput] = useState(initialFullName || '');
   const [registerInput, setRegisterInput] = useState(initialRegisterNumber || '');
   const [isScanning, setIsScanning] = useState(false);
   const [scanStep, setScanStep] = useState(0);
@@ -15,19 +21,30 @@ export const SecurityGate: React.FC<SecurityGateProps> = ({ onClearanceGranted, 
   const [auditResult, setAuditResult] = useState<UserClearance | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
 
-  const sampleIds = ['REG-CYBER-8842', 'STUDENT-SEC-9410', 'DEV-VAULT-2026'];
+  const samplePresets = [
+    { id: 'REG-CYBER-8842', name: 'Balaji' },
+    { id: 'STUDENT-SEC-9410', name: 'Alex Vance' },
+    { id: 'DEV-VAULT-2026', name: 'Elena Rostova' }
+  ];
 
-  const executeSecurityAudit = (idToTest?: string) => {
+  const executeSecurityAudit = (idToTest?: string, nameToTest?: string) => {
     const targetId = (idToTest || registerInput).trim();
+    const targetName = (nameToTest !== undefined ? nameToTest : nameInput).trim();
+
+    if (!targetName || targetName.length < 2) {
+      setErrorMsg('Please enter your full name / operator handle (minimum 2 characters)');
+      return;
+    }
+
     if (!targetId || targetId.length < 4) {
-      setErrorMsg('Please enter a valid registration or account number (minimum 4 characters)');
+      setErrorMsg('Please enter a valid registration or access ID (minimum 4 characters)');
       return;
     }
 
     setErrorMsg('');
     setIsScanning(true);
     setScanStep(1);
-    setScanLogs([`[0.00s] Initializing diagnostic handshake for ID: ${targetId}`]);
+    setScanLogs([`[0.00s] Initializing diagnostic handshake for Operator "${targetName}" [ID: ${targetId}]`]);
     setAuditResult(null);
 
     // Progressive simulated diagnostic steps
@@ -52,11 +69,12 @@ export const SecurityGate: React.FC<SecurityGateProps> = ({ onClearanceGranted, 
     setTimeout(() => {
       setScanStep(4);
       // Generate deterministic or calculated score
-      const charSum = targetId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+      const charSum = (targetId + targetName).split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
       const score = 88 + (charSum % 11); // score between 88 and 98
       const leaks = (charSum % 7 === 0) ? 1 : 0;
 
       const result: UserClearance = {
+        fullName: targetName,
         registerNumber: targetId,
         verifiedAt: new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }),
         safetyScore: leaks > 0 ? 84 : score,
@@ -138,55 +156,94 @@ export const SecurityGate: React.FC<SecurityGateProps> = ({ onClearanceGranted, 
 
             {/* Input Form */}
             <div className="space-y-4">
-              <div>
-                <label htmlFor="regInput" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2 font-mono">
-                  Register Number / Access ID
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
-                    <KeyRound className="w-4 h-4 text-cyan-400" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Column 1: Operator Full Name */}
+                <div>
+                  <label htmlFor="nameInput" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2 font-mono flex items-center justify-between">
+                    <span>Operator Full Name</span>
+                    <span className="text-[10px] text-cyan-400 font-normal">REQUIRED</span>
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                      <User className="w-4 h-4 text-cyan-400" />
+                    </div>
+                    <input
+                      id="nameInput"
+                      type="text"
+                      value={nameInput}
+                      onChange={(e) => {
+                        setNameInput(e.target.value);
+                        setErrorMsg('');
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !isScanning) {
+                          executeSecurityAudit();
+                        }
+                      }}
+                      placeholder="e.g. Balaji or Alex Mercer"
+                      className="w-full pl-10 pr-4 py-3 bg-[#070b16] border border-cyan-900/80 rounded-lg text-white font-mono text-sm placeholder:text-slate-600 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-colors shadow-inner"
+                      disabled={isScanning}
+                    />
                   </div>
-                  <input
-                    id="regInput"
-                    type="text"
-                    value={registerInput}
-                    onChange={(e) => {
-                      setRegisterInput(e.target.value.toUpperCase());
-                      setErrorMsg('');
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && !isScanning) {
-                        executeSecurityAudit();
-                      }
-                    }}
-                    placeholder="e.g. REG-CYBER-8842 or 2026-CS-109"
-                    className="w-full pl-10 pr-4 py-3 bg-[#070b16] border border-cyan-900/80 rounded-lg text-white font-mono text-sm placeholder:text-slate-600 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-colors shadow-inner"
-                    disabled={isScanning}
-                  />
                 </div>
-                {errorMsg && (
-                  <p className="text-xs text-rose-400 mt-1.5 flex items-center gap-1.5 font-mono">
-                    <AlertTriangle className="w-3.5 h-3.5" />
-                    {errorMsg}
-                  </p>
-                )}
+
+                {/* Column 2: Register Number / Access ID */}
+                <div>
+                  <label htmlFor="regInput" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2 font-mono flex items-center justify-between">
+                    <span>Register Number / ID</span>
+                    <span className="text-[10px] text-cyan-400 font-normal">REQUIRED</span>
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                      <KeyRound className="w-4 h-4 text-cyan-400" />
+                    </div>
+                    <input
+                      id="regInput"
+                      type="text"
+                      value={registerInput}
+                      onChange={(e) => {
+                        setRegisterInput(e.target.value.toUpperCase());
+                        setErrorMsg('');
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !isScanning) {
+                          executeSecurityAudit();
+                        }
+                      }}
+                      placeholder="e.g. REG-CYBER-8842"
+                      className="w-full pl-10 pr-4 py-3 bg-[#070b16] border border-cyan-900/80 rounded-lg text-white font-mono text-sm placeholder:text-slate-600 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-colors shadow-inner"
+                      disabled={isScanning}
+                    />
+                  </div>
+                </div>
               </div>
+
+              {errorMsg && (
+                <p className="text-xs text-rose-400 mt-1 flex items-center gap-1.5 font-mono bg-rose-950/40 border border-rose-900/60 p-2 rounded-lg">
+                  <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+                  {errorMsg}
+                </p>
+              )}
 
               {/* Quick Preset Buttons */}
               <div className="flex flex-wrap items-center gap-2 pt-1">
-                <span className="text-xs text-slate-500 font-mono">Quick test IDs:</span>
-                {sampleIds.map((id) => (
+                <span className="text-xs text-slate-500 font-mono">Quick test profiles:</span>
+                {samplePresets.map((preset) => (
                   <button
-                    key={id}
+                    key={preset.id}
                     type="button"
                     onClick={() => {
-                      setRegisterInput(id);
-                      executeSecurityAudit(id);
+                      setRegisterInput(preset.id);
+                      const nameToUse = nameInput.trim() ? nameInput.trim() : preset.name;
+                      if (!nameInput.trim()) {
+                        setNameInput(preset.name);
+                      }
+                      executeSecurityAudit(preset.id, nameToUse);
                     }}
                     disabled={isScanning}
-                    className="text-xs font-mono text-cyan-400 hover:text-cyan-300 bg-cyan-950/40 hover:bg-cyan-950/80 border border-cyan-800/60 px-2.5 py-1 rounded transition-colors disabled:opacity-50"
+                    className="text-xs font-mono text-cyan-400 hover:text-cyan-300 bg-cyan-950/40 hover:bg-cyan-950/80 border border-cyan-800/60 px-2.5 py-1 rounded transition-colors disabled:opacity-50 cursor-pointer"
                   >
-                    {id}
+                    {preset.name} ({preset.id})
                   </button>
                 ))}
               </div>
@@ -207,7 +264,7 @@ export const SecurityGate: React.FC<SecurityGateProps> = ({ onClearanceGranted, 
                   ) : (
                     <>
                       <Search className="w-4 h-4" />
-                      <span>Run Security Audit & Check Safety</span>
+                      <span>Verify Identity & Run Safety Audit</span>
                     </>
                   )}
                 </button>
@@ -255,14 +312,17 @@ export const SecurityGate: React.FC<SecurityGateProps> = ({ onClearanceGranted, 
                       <CheckCircle2 className="w-6 h-6" />
                     </div>
                     <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-bold text-white font-mono">{auditResult.registerNumber}</span>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-base font-bold text-white font-mono">{auditResult.fullName}</span>
+                        <span className="text-xs px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 font-mono">
+                          ID: {auditResult.registerNumber}
+                        </span>
                         <span className="text-xs px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-400 border border-emerald-500/30 font-mono">
                           SAFE TO PROCEED
                         </span>
                       </div>
                       <p className="text-xs text-slate-400 mt-0.5 font-mono">
-                        Audit Timestamp: {auditResult.verifiedAt} · Clearance Level 1
+                        Audit Timestamp: {auditResult.verifiedAt} · Clearance Level 1 Verified
                       </p>
                     </div>
                   </div>

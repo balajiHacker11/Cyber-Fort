@@ -13,7 +13,8 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, onTabChange, clearan
   const navItems = [
     { id: 'core', label: 'What is Cyber Security?' },
     { id: 'labs', label: 'Interactive Labs & Simulators' },
-    { id: 'tutorials', label: 'Defense Masterclasses' }
+    { id: 'tutorials', label: 'Defense Masterclasses' },
+    { id: 'ctf', label: 'CTF Arena' }
   ];
 
   return (
@@ -58,20 +59,21 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, onTabChange, clearan
         <div className="flex items-center gap-3">
           <div className="hidden sm:flex items-center gap-2 px-2.5 py-1 rounded bg-[#090e1f] border border-cyan-900/60 text-xs font-mono">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-slate-400">ID:</span>
-            <span className="text-cyan-300 font-medium truncate max-w-[120px]">{clearance.registerNumber}</span>
+            <span className="text-white font-bold truncate max-w-[120px]">{clearance.fullName || 'Operator'}</span>
             <span className="text-slate-600">|</span>
-            <span className="text-emerald-400 font-semibold">{clearance.safetyScore}% Verified</span>
+            <span className="text-cyan-300 font-medium truncate max-w-[100px]">{clearance.registerNumber}</span>
+            <span className="text-slate-600">|</span>
+            <span className="text-emerald-400 font-semibold">{clearance.safetyScore}% Safe</span>
           </div>
 
           <button
             type="button"
             onClick={onReverify}
-            title="Re-run register number audit"
+            title="Re-run security audit with another ID or Name"
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono font-medium text-slate-300 hover:text-white bg-[#0f172a] hover:bg-[#1e293b] border border-slate-800 hover:border-cyan-800/60 rounded-md transition-all cursor-pointer whitespace-nowrap"
           >
             <RotateCcw className="w-3.5 h-3.5 text-cyan-400" />
-            <span className="hidden sm:inline">Switch ID</span>
+            <span className="hidden sm:inline">Switch Profile</span>
           </button>
         </div>
       </div>

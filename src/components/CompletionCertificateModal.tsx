@@ -122,10 +122,13 @@ export const CompletionCertificateModal: React.FC<CompletionCertificateModalProp
             {/* Personalized Recipient Section */}
             <div className="my-8 py-6 border-y border-cyan-900/60 text-center space-y-2">
               <span className="text-xs font-mono text-slate-400 uppercase tracking-widest">
-                VERIFIED OPERATOR & REGISTER NUMBER
+                ACCREDITED OPERATOR & REGISTER NUMBER
               </span>
-              <div className="text-2xl sm:text-3xl font-extrabold text-white font-mono tracking-wider text-cyan-300">
-                {regId}
+              <div className="text-2xl sm:text-3xl font-extrabold text-white font-['Syne',sans-serif] tracking-wider text-cyan-300">
+                {clearance.fullName || 'Certified Cyber Defender'}
+              </div>
+              <div className="text-xs sm:text-sm font-mono text-cyan-400 font-bold tracking-wider">
+                REGISTER ID: {regId}
               </div>
               <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-mono text-slate-400 pt-1">
                 <span>Security Clearance: <strong className="text-emerald-400 font-semibold">Tier 1 Master Defender</strong></span>
