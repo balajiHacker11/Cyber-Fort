@@ -27,7 +27,7 @@ export const CyberSecurityCore: React.FC = () => {
               <Shield className="w-4 h-4" />
               <span>THE FOUNDATIONAL DEFENSIVE SCIENCE</span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-white font-['Syne',sans-serif] tracking-tight leading-tight">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-white font-cyber tracking-wide leading-tight">
               What is Cybersecurity?
             </h1>
             <p className="text-sm text-slate-300 leading-relaxed">

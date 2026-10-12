@@ -213,9 +213,19 @@ export const ChallengeGrid: React.FC<ChallengeGridProps> = ({
 
               {/* Bottom Card Footer */}
               <div className="mt-4 pt-3 border-t border-cyan-950/80 flex items-center justify-between text-xs font-mono">
-                <span className="text-slate-500">
-                  {challenge.initialSolves + (isSolved ? 1 : 0)} solves
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-slate-400">
+                    {challenge.initialSolves + (isSolved ? 1 : 0)} solves
+                  </span>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-cyan-950/80 text-cyan-300 border border-cyan-900/60 font-semibold" title="Community Solve Rate">
+                    {Math.round(((challenge.initialSolves + (isSolved ? 1 : 0)) / 150) * 100)}% rate
+                  </span>
+                  {challenge.quiz && (
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-purple-950/60 text-purple-300 border border-purple-800/60 font-medium hidden sm:inline" title="50 Quiz Points Available">
+                      +50 quiz pts
+                    </span>
+                  )}
+                </div>
 
                 {isSolved ? (
                   <span className="text-emerald-400 font-bold flex items-center gap-1.5 text-[11px]">

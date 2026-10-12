@@ -23,6 +23,23 @@ export interface ChallengeArtifact {
   content: string;
 }
 
+export interface TerminalFlagInstructions {
+  windowsPowershell: string;
+  windowsCmd: string;
+  linuxBash: string;
+  explanation: string;
+  expectedOutput?: string;
+}
+
+export interface ChallengeQuizQuestion {
+  id: string;
+  question: string;
+  options: string[];
+  correctOptionIndex: number; // 0-based index
+  explanation: string;
+  points: number; // e.g. 50 points
+}
+
 export interface CtfChallenge {
   id: string;
   title: string;
@@ -35,6 +52,8 @@ export interface CtfChallenge {
   targetEnvironment?: string;
   hints: ChallengeHint[];
   artifacts: ChallengeArtifact[];
+  terminalGuidance?: TerminalFlagInstructions;
+  quiz?: ChallengeQuizQuestion;
   flagFormat: string;
   flagHash: string; // SHA-256 hash of the valid flag
   tags: string[];
@@ -51,6 +70,8 @@ export interface LeaderboardUser {
   lastSolveAt: string;
   affiliation: string;
   isCurrentUser?: boolean;
+  attendedAt?: string;
+  eventStatus?: 'ATTENDING LIVE' | 'REGISTERED' | 'CHECKED IN';
 }
 
 export interface CtfWriteup {

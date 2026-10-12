@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ShieldCheck, ShieldAlert, KeyRound, Search, Terminal, Lock, ArrowRight, CheckCircle2, AlertTriangle, Cpu, User } from 'lucide-react';
 import { UserClearance } from '../types';
+import { recordAttendeeLogin } from '../data/attendeeStore';
 
 interface SecurityGateProps {
   onClearanceGranted: (clearance: UserClearance) => void;
@@ -95,6 +96,7 @@ export const SecurityGate: React.FC<SecurityGateProps> = ({
 
   const handleGrantAccess = () => {
     if (auditResult) {
+      recordAttendeeLogin(auditResult);
       onClearanceGranted(auditResult);
     }
   };
@@ -122,13 +124,13 @@ export const SecurityGate: React.FC<SecurityGateProps> = ({
             <ShieldCheck className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-base font-bold tracking-tight text-white font-['Syne',sans-serif]">CYBER FORT</span>
+            <span className="text-base font-bold tracking-wider text-white font-cyber">CYBER FORT</span>
             <span className="text-xs text-cyan-400/80 ml-2 font-mono">v2.4 DEFENSE GATE</span>
           </div>
         </div>
-        <div className="flex items-center gap-2 text-xs text-slate-400 font-mono">
+        <div className="flex items-center gap-2 text-xs text-slate-300 font-mono">
           <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span>FIREWALL ACTIVE</span>
+          <span className="text-emerald-400 font-semibold">GATEWAY SECURED</span>
         </div>
       </header>
 
@@ -146,11 +148,11 @@ export const SecurityGate: React.FC<SecurityGateProps> = ({
               <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 mb-4 shadow-[0_0_25px_rgba(6,182,212,0.25)]">
                 <Lock className="w-7 h-7" />
               </div>
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white font-['Syne',sans-serif]">
-                Security Clearance Verification
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-wide text-white font-cyber">
+                SECURITY CLEARANCE LOGIN
               </h1>
-              <p className="text-sm text-slate-400 mt-2 max-w-md mx-auto leading-relaxed">
-                Before entering <span className="text-cyan-300 font-medium">Cyber Fort</span>, verify your account status. Enter your registration ID to run a credential safety audit and threat exposure check.
+              <p className="text-sm text-slate-300 mt-2 max-w-md mx-auto leading-relaxed font-sans">
+                Enter your <span className="text-white font-semibold">Full Name</span> and <span className="text-cyan-300 font-semibold">Registration ID</span> to run safety diagnostics and attend the official <span className="text-cyan-400 font-semibold">CTF Event</span>.
               </p>
             </div>
 
@@ -353,11 +355,15 @@ export const SecurityGate: React.FC<SecurityGateProps> = ({
                 <button
                   type="button"
                   onClick={handleGrantAccess}
-                  className="w-full mt-4 py-3 px-4 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold text-sm rounded-lg flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(16,185,129,0.35)] cursor-pointer"
+                  className="w-full mt-4 py-3 px-4 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold text-sm font-tech tracking-wide rounded-lg flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(16,185,129,0.35)] cursor-pointer"
                 >
-                  <span>Enter Cyber Fort Fortress</span>
+                  <span>Grant Clearance & Enter CTF Arena</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
+                <div className="mt-2 text-center text-[11px] font-mono text-cyan-300/90 flex items-center justify-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>Enrolling {auditResult.fullName} [ID: {auditResult.registerNumber}] into Live CTF Event Leaderboard</span>
+                </div>
               </div>
             )}
           </div>

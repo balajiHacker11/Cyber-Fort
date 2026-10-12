@@ -94,7 +94,7 @@ export const DefenseTutorials: React.FC<DefenseTutorialsProps> = ({ clearance })
             <BookOpen className="w-4 h-4" />
             <span>EXPANDED CYBER DEFENSE SIMULATION CURRICULUM</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white font-['Syne',sans-serif] tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white font-cyber tracking-wide">
             Cyber Fort Defense Academy & Masterclasses
           </h1>
           <p className="text-sm text-slate-400 max-w-2xl leading-relaxed">

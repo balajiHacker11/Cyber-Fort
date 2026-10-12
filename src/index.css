@@ -1,1 +1,80 @@
 @import "tailwindcss";
+
+@theme {
+  --font-cyber: 'Orbitron', 'Chakra Petch', monospace, sans-serif;
+  --font-tech: 'Chakra Petch', 'Rajdhani', sans-serif;
+  --font-sans: 'Rajdhani', 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Share Tech Mono', monospace;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    letter-spacing: 0.015em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #060913;
+    color: #f1f5f9;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-cyber);
+    letter-spacing: 0.03em;
+  }
+}
+
+/* Realtime Cyber Aesthetic Utilities for maximum human visibility */
+.font-cyber {
+  font-family: var(--font-cyber);
+}
+
+.font-tech {
+  font-family: var(--font-tech);
+}
+
+.font-mono-cyber {
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+}
+
+.glow-cyan-sm {
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.25);
+}
+
+.glow-cyan-md {
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.35);
+}
+
+.glow-emerald-sm {
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
+}
+
+.glow-amber-sm {
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.25);
+}
+
+.cyber-panel {
+  background: linear-gradient(180deg, rgba(9, 14, 31, 0.95) 0%, rgba(6, 9, 19, 0.98) 100%);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+}
+
+.cyber-panel-hover:hover {
+  border-color: rgba(6, 182, 212, 0.5);
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.15);
+}
+
+/* High visibility custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #060913;
+}
+::-webkit-scrollbar-thumb {
+  background: #164e63;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #0891b2;
+}

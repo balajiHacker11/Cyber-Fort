@@ -15,7 +15,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <div className="w-7 h-7 rounded-lg bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-cyan-400">
               <Shield className="w-4 h-4" />
             </div>
-            <span className="text-base font-bold text-white font-['Syne',sans-serif]">Cyber Fort</span>
+            <span className="text-base font-bold text-white font-cyber tracking-wider">Cyber Fort</span>
           </div>
           <p className="text-xs text-slate-400 leading-relaxed max-w-md">
             Dedicated to advancing cybersecurity education, ethical hacking methodologies, Blue Team SOC defense techniques, and hands-on protective simulation labs.

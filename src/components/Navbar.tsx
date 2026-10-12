@@ -28,7 +28,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, onTabChange, clearan
           <button
             type="button"
             onClick={() => onTabChange('core')}
-            className="text-lg font-bold tracking-tight text-white font-['Syne',sans-serif] hover:text-cyan-300 transition-colors cursor-pointer text-left"
+            className="text-lg font-bold tracking-wider text-white font-cyber hover:text-cyan-300 transition-colors cursor-pointer text-left"
           >
             Cyber Fort
           </button>
@@ -43,10 +43,10 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, onTabChange, clearan
                 key={item.id}
                 type="button"
                 onClick={() => onTabChange(item.id)}
-                className={`px-3.5 py-1.5 text-xs font-semibold tracking-wide transition-all whitespace-nowrap cursor-pointer rounded-md font-mono ${
+                className={`px-3.5 py-1.5 text-xs font-semibold tracking-wide transition-all whitespace-nowrap cursor-pointer rounded-md font-tech ${
                   isActive
-                    ? 'text-cyan-300 bg-cyan-950/60 border border-cyan-800/60 shadow-[0_0_10px_rgba(6,182,212,0.15)]'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/40'
+                    ? 'text-cyan-300 bg-cyan-950/60 border border-cyan-800/60 shadow-[0_0_10px_rgba(6,182,212,0.15)] font-bold'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-900/60'
                 }`}
               >
                 {item.label}

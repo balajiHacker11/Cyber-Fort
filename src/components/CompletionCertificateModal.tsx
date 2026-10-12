@@ -111,7 +111,7 @@ export const CompletionCertificateModal: React.FC<CompletionCertificateModalProp
               <div className="text-xs font-mono tracking-widest text-cyan-400 uppercase">
                 CYBER FORT CYBERSECURITY DEFENSE ACADEMY
               </div>
-              <h2 className="text-2xl sm:text-4xl font-extrabold text-white font-['Syne',sans-serif] tracking-tight">
+              <h2 className="text-2xl sm:text-4xl font-extrabold text-white font-cyber tracking-wide">
                 CERTIFICATE OF MASTERY
               </h2>
               <p className="text-xs sm:text-sm text-slate-400 font-mono">
@@ -124,7 +124,7 @@ export const CompletionCertificateModal: React.FC<CompletionCertificateModalProp
               <span className="text-xs font-mono text-slate-400 uppercase tracking-widest">
                 ACCREDITED OPERATOR & REGISTER NUMBER
               </span>
-              <div className="text-2xl sm:text-3xl font-extrabold text-white font-['Syne',sans-serif] tracking-wider text-cyan-300">
+              <div className="text-2xl sm:text-3xl font-extrabold text-white font-cyber tracking-wider text-cyan-300">
                 {clearance.fullName || 'Certified Cyber Defender'}
               </div>
               <div className="text-xs sm:text-sm font-mono text-cyan-400 font-bold tracking-wider">

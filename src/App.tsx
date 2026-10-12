@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SecurityGate } from './components/SecurityGate';
 import { Navbar } from './components/Navbar';
 import { CyberSecurityCore } from './components/CyberSecurityCore';
@@ -8,12 +8,29 @@ import { CtfArena } from './components/ctf/CtfArena';
 import { Footer } from './components/Footer';
 import { UserClearance } from './types';
 import { Shield, BookOpen, Terminal, CheckCircle2, Flag } from 'lucide-react';
+import { recordAttendeeLogin } from './data/attendeeStore';
 
 export default function App() {
   const [clearance, setClearance] = useState<UserClearance | null>(() => {
     try {
       const saved = localStorage.getItem('cyber_fort_clearance');
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === 'object') {
+          // Validate required fields
+          if (parsed.registerNumber && parsed.fullName) {
+            return parsed as UserClearance;
+          }
+          // If partial, sanitize with defaults
+          if (parsed.registerNumber || parsed.fullName) {
+            return {
+              ...parsed,
+              registerNumber: String(parsed.registerNumber || 'OP-2024').trim(),
+              fullName: String(parsed.fullName || parsed.registerNumber || 'Authorized Operator').trim()
+            } as UserClearance;
+          }
+        }
+      }
     } catch {
       // ignore
     }
@@ -24,7 +41,19 @@ export default function App() {
   const [currentTab, setCurrentTab] = useState<string>('core');
   const [showGateOverlay, setShowGateOverlay] = useState<boolean>(false);
 
+  // Sync attendee on app load if clearance exists
+  useEffect(() => {
+    if (clearance) {
+      try {
+        recordAttendeeLogin(clearance);
+      } catch (err) {
+        console.error('Failed to sync attendee login', err);
+      }
+    }
+  }, [clearance]);
+
   const handleClearanceGranted = (newClearance: UserClearance) => {
+    recordAttendeeLogin(newClearance);
     setClearance(newClearance);
     setShowGateOverlay(false);
     try {
@@ -92,11 +121,11 @@ export default function App() {
                 <span className="text-emerald-400 font-bold">{clearance.safetyScore}/100 Verified Safe</span>
               </div>
 
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white font-['Syne',sans-serif] tracking-tight leading-tight">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white font-cyber tracking-wide leading-tight">
                 Cyber Fort: Cyber Security Defense Academy & Interactive Labs
               </h1>
 
-              <p className="text-sm text-slate-300 leading-relaxed max-w-2xl">
+              <p className="text-sm text-slate-200 leading-relaxed max-w-2xl font-sans">
                 Master defensive cybersecurity engineering. Explore the foundational CIA Triad, inspect real-world threat vectors, and execute hands-on simulations across Web Security, Blue Team SOC, OSINT, and Ethical Hacking.
               </p>
 
@@ -105,7 +134,7 @@ export default function App() {
                 <button
                   type="button"
                   onClick={() => setCurrentTab('core')}
-                  className={`px-3.5 py-2 text-xs font-mono rounded-lg transition-colors cursor-pointer flex items-center gap-2 ${
+                  className={`px-3.5 py-2 text-xs font-tech font-semibold tracking-wide rounded-lg transition-colors cursor-pointer flex items-center gap-2 ${
                     currentTab === 'core'
                       ? 'bg-cyan-600 text-slate-950 font-bold shadow-[0_0_15px_rgba(6,182,212,0.4)]'
                       : 'bg-[#060913] text-slate-300 hover:text-white border border-cyan-950 hover:border-cyan-800'
@@ -117,7 +146,7 @@ export default function App() {
                 <button
                   type="button"
                   onClick={() => setCurrentTab('labs')}
-                  className={`px-3.5 py-2 text-xs font-mono rounded-lg transition-colors cursor-pointer flex items-center gap-2 ${
+                  className={`px-3.5 py-2 text-xs font-tech font-semibold tracking-wide rounded-lg transition-colors cursor-pointer flex items-center gap-2 ${
                     currentTab === 'labs'
                       ? 'bg-cyan-600 text-slate-950 font-bold shadow-[0_0_15px_rgba(6,182,212,0.4)]'
                       : 'bg-[#060913] text-slate-300 hover:text-white border border-cyan-950 hover:border-cyan-800'
@@ -129,7 +158,7 @@ export default function App() {
                 <button
                   type="button"
                   onClick={() => setCurrentTab('tutorials')}
-                  className={`px-3.5 py-2 text-xs font-mono rounded-lg transition-colors cursor-pointer flex items-center gap-2 ${
+                  className={`px-3.5 py-2 text-xs font-tech font-semibold tracking-wide rounded-lg transition-colors cursor-pointer flex items-center gap-2 ${
                     currentTab === 'tutorials'
                       ? 'bg-cyan-600 text-slate-950 font-bold shadow-[0_0_15px_rgba(6,182,212,0.4)]'
                       : 'bg-[#060913] text-slate-300 hover:text-white border border-cyan-950 hover:border-cyan-800'
@@ -141,7 +170,7 @@ export default function App() {
                 <button
                   type="button"
                   onClick={() => setCurrentTab('ctf')}
-                  className={`px-3.5 py-2 text-xs font-mono rounded-lg transition-colors cursor-pointer flex items-center gap-2 ${
+                  className={`px-3.5 py-2 text-xs font-tech font-semibold tracking-wide rounded-lg transition-colors cursor-pointer flex items-center gap-2 ${
                     currentTab === 'ctf'
                       ? 'bg-cyan-600 text-slate-950 font-bold shadow-[0_0_15px_rgba(6,182,212,0.4)]'
                       : 'bg-[#060913] text-slate-300 hover:text-white border border-cyan-950 hover:border-cyan-800'
